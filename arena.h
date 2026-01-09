@@ -15,8 +15,6 @@ void auninit(arena_t *arena);
 #include <stdlib.h>
 #include <string.h>
 
-#define __SIGN_MASK 1U << (sizeof(signed int) * 8 - 1)
-
 struct __arena_t{
   void *start;
   asize_t size;
@@ -49,7 +47,6 @@ arena_t *ainit(asize_t size) {
   arena_t *ret = malloc(sizeof(struct __arena_t));
   if (!ret) return NULL;
 
-  //printf("%lu\n", size);
   ret->start = malloc(size);
   if (!ret->start) return NULL;
 

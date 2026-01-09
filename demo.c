@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 
 #define ARENA_IMPLEMENTATION
 #include "arena.h"
 
-#define MB(a) a*1024
+#define KB(a) a*1024
+#define MB(a) KB(a)*1024
 #define GB(a) MB(a)*1024
 
 
@@ -11,7 +13,7 @@
 #define STRLIT2 "Bye, World!"
 
 int main() {
-  arena_t *arena = ainit(31);
+  arena_t *arena = ainit(MB(4));
   if (!arena) return 100;
 
   char *str = aalloc(arena, strlen(STRLIT)+1);

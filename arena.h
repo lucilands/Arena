@@ -7,13 +7,11 @@ typedef struct __arena_t arena_t;
 
 arena_t *ainit(asize_t size);
 void *aalloc(arena_t *arena, asize_t size);
-void *aalloc0(arena_t *arena, asize_t size); // NOTE: This function also zeros the block of memory when allocating
 void afree(void *ptr);
 void auninit(arena_t *arena);
 
 #ifdef ARENA_IMPLEMENTATION
 #include <stdlib.h>
-#include <string.h>
 
 struct __arena_t{
   void *start;
@@ -44,15 +42,14 @@ void *__find_free_chunk(arena_t *arena, asize_t size) {
 
 arena_t *ainit(asize_t size) {
   if (!size) return NULL;
-  arena_t *ret = malloc(sizeof(struct __arena_t));
+  arena_t *ret = (arena_t*)malloc(sizeof(struct __arena_t));
   if (!ret) return NULL;
 
   ret->start = malloc(size);
   if (!ret->start) return NULL;
 
   ret->size = size;
-
-  memset(ret->start, 0, size);
+  for (asize_t i = 0; i < size; i++) {((unsigned char*)ret->start)[i] = 0;}
 
   return ret;
 }
@@ -67,13 +64,6 @@ void *aalloc(arena_t *arena, asize_t size) {
   ret_cast[0].size = -size;
 
   ret = (char*)ret + sizeof(struct __arena_info_t);
-  return ret;
-}
-
-void *aalloc0(arena_t *arena, asize_t size) {
-  void *ret = aalloc(arena, size);
-  memset(ret, 0, size);
-
   return ret;
 }
 

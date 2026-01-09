@@ -19,7 +19,6 @@ void auninit(arena_t *arena);
 
 struct __arena_t{
   void *start;
-  void *head;
   asize_t size;
 };
 
@@ -54,7 +53,6 @@ arena_t *ainit(asize_t size) {
   ret->start = malloc(size);
   if (!ret->start) return NULL;
 
-  ret->head = ret->start;
   ret->size = size;
 
   memset(ret->start, 0, size);
